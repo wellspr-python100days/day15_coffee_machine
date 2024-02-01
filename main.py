@@ -45,7 +45,7 @@ def print_report():
         unit = resources[resource]["unit"]
         print(f"{resource.title()}: {quantity}{unit}")
 
-    print(f"\nOperations: ")
+    print("\nOperations: ")
     for op in operations:
         print(
             f"drink: {op['sold']['drink']} - received: {op['sold']['money_received']}"
@@ -131,43 +131,39 @@ def machine():
 
     while MACHINE_ON:
 
-        try:
-            print("\nMenu: \n")
-            for n in range(0, 3):
-                print(f"{n} - {drinks[n]} (${get_cost(n):.2f})")
+        print("\nMenu: \n")
+        for n in range(0, 3):
+            print(f"{n} - {drinks[n]} (${get_cost(n):.2f})")
 
-            option = input("\n> ")
+        option = input("\n> ")
 
-            if option in ["0", "1", "2"]:
-                int_option = int(option)
-                drink = drinks[int_option]
-                cost = get_cost(int_option)
+        if option in ["0", "1", "2"]:
+            int_option = int(option)
+            drink = drinks[int_option]
 
-                if check_resources(int_option):
-                    print("Please insert the number of coins in the order: ")
-                    money_inserted = {}
+            if check_resources(int_option):
+                print("Please insert the number of coins in the order: ")
+                money_inserted = {}
 
-                    for piece in ["quarter", "dime", "nickel", "penny"]:
-                        value = input(f"> {coins_plurals[piece].title()} > ")
-                        try:
-                            value = int(value)
-                        except:
-                            value = 0
-                        money_inserted[piece] = value
+                for piece in ["quarter", "dime", "nickel", "penny"]:
+                    value = input(f"> {coins_plurals[piece].title()} > ")
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        value = 0
+                    money_inserted[piece] = value
 
-                    if check_payment(int_option, money_inserted):
-                        print(f"\nPreparing a {drink}...\nHere is your drink.")
-                        make_drink(int_option)
+                if check_payment(int_option, money_inserted):
+                    print(f"\nPreparing a {drink}...\nHere is your drink.")
+                    make_drink(int_option)
 
-            elif option == "report":
-                print_report()
+        elif option == "report":
+            print_report()
 
-            elif option == "off":
-                MACHINE_ON = False
+        elif option == "off":
+            MACHINE_ON = False
 
-            else:
-                print("Invalid option.")
-        except:
-            pass
+        else:
+            print("Invalid option.")
 
 machine()
